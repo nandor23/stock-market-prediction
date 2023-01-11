@@ -1,1 +1,1 @@
-# srock-market-prediction
+# stock-market-prediction
