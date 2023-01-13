@@ -1,0 +1,15 @@
+.upload-button {
+  display: inline-block;
+  padding: 10px 12px;
+  cursor: pointer;
+  margin: 15px;
+  width: 170px;
+  padding-left: 22px;
+  background-color: #CCD6A6;
+  border-radius: 5px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
