@@ -2,8 +2,11 @@ import { FunctionComponent, useState } from "react";
 import styles from '../assets/css/home.module.css';
 import UploadButton from "../components/UploadButton";
 import { Card } from "@mui/material";
+import Button from '@mui/material/Button';
+import Lottie from "lottie-react";
 import predictionApi from "../api/prediction-api";
-// import { Line } from 'react-chartjs-2';
+import PieChart from "../components/PieChart";
+import loadingAnimation from "../assets/images/loading.json";
 
 
 const HomePage: FunctionComponent = () => {
@@ -13,12 +16,14 @@ const HomePage: FunctionComponent = () => {
   const [precision, setPrecision] = useState<number>();
   const [successfulPredictions, setSuccessfulPredictions] = useState<[]>();
   const [unsuccessfulPredictions, setUnsuccessfulPredictions] = useState<[]>();
+  const [isButtonPressed, setIsButtonPressed] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     if (trainFile === undefined || testFile === undefined) {
       setErrorMessage('Please provide the 2 files');
       return;
     }
+    setIsButtonPressed(true);
     setErrorMessage('');
     const formData = new FormData();
     formData.append('train_data', trainFile);
@@ -27,6 +32,7 @@ const HomePage: FunctionComponent = () => {
     await predictionApi.getPrediction(formData)
       .then((res) => {
         if (res.status === 200) {
+          setIsButtonPressed(false);
           setPrecision(res.data[0]);
           setSuccessfulPredictions(res.data[1]);
           setUnsuccessfulPredictions(res.data[2]);
@@ -37,26 +43,36 @@ const HomePage: FunctionComponent = () => {
 
   return (
     <div className={styles.container}>
-      <Card>
-        <div className={styles["side-panel"]}>
-          <UploadButton
-            title="Upload train data"
-            onUpload={setTrainFile}
-          />
-          <UploadButton
-            title="Upload test data"
-            onUpload={setTestFile}
-          />
-          <button className={styles["send-button"]}
-            onClick={() => handleSubmit()}
-          >
-            Send
-          </button>
-          <div className={styles.error}>
-            {errorMessage}
+      <div className={styles["inner-container"]}>
+        <Card style={{height: 550, width: 550, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          {isButtonPressed ? (
+            <Lottie animationData={loadingAnimation} loop={true} />
+          ) : precision && (
+            <PieChart 
+              precision={precision}
+            />
+          )}
+          
+        </Card>
+        <Card style={{height: 340, width: 400, marginLeft: 50}}>
+          <div className={styles["side-panel"]}>
+            <UploadButton
+              title="Upload train data"
+              onUpload={setTrainFile}
+            />
+            <UploadButton
+              title="Upload test data"
+              onUpload={setTestFile}
+            />
+            <Button variant="contained" className={styles["send-button"]} onClick={() => handleSubmit()}>
+              Send
+            </Button>
+            <div className={styles.error}>
+              {errorMessage}
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }

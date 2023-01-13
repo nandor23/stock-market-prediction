@@ -9,30 +9,31 @@
 }
 
 .send-button {
-  margin-top: 40px;
+  margin-top: 40px !important;
   border: none;
   background: none;
   width: 170px;
   height: 45px;
   border-radius: 10px;
-  background-color: #4681f4;
-  font-size: 24px;
-  color: white;
+  font-size: 20px;
   cursor: pointer;
 }
 
 .side-panel {
-  margin-top: -15px;
+  margin-top: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 340px;
-  width: 400px;
 }
 
 .error {
   margin-top: 20px;
   font-size: 20px;
   color: rgb(232, 33, 33);
+}
+
+.inner-container {
+  display: flex;
+  flex-direction: row;
 }
