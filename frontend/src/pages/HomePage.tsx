@@ -17,7 +17,6 @@ const HomePage: FunctionComponent = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [precision, setPrecision] = useState<number>();
   const [successfulPredictions, setSuccessfulPredictions] = useState<[]>();
-  const [unsuccessfulPredictions, setUnsuccessfulPredictions] = useState<[]>();
   const [isButtonPressed, setIsButtonPressed] = useState<boolean>(false);
   const [heads, setHeads] = useState<[]>();
   const [data, setData] = useState<[]>();
@@ -26,7 +25,7 @@ const HomePage: FunctionComponent = () => {
     if (testFile !== undefined) {
       const splitData = testFile.split(/\r?\n/);
       setHeads(splitData.shift().split(','));
-      console.log(splitData);
+      splitData.pop();
       for (let i = 0; i < splitData.length; i++) {
         splitData[i] =  splitData[i].split(',')
         splitData[i] =  {
@@ -60,7 +59,6 @@ const HomePage: FunctionComponent = () => {
           setIsButtonPressed(false);
           setPrecision(res.data[0]);
           setSuccessfulPredictions(res.data[1]);
-          setUnsuccessfulPredictions(res.data[2]);
         }
       })
 
@@ -100,7 +98,7 @@ const HomePage: FunctionComponent = () => {
       </div>
       <div style={{marginTop: 150}}>
       {data !== undefined &&
-        <DataTable heads={heads} data={data}/>
+        <DataTable heads={heads} data={data} successful={successfulPredictions}/>
       }
       </div>
     </div>
