@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import styles from '../assets/css/home.module.css';
 import UploadButton from "../components/UploadButton";
 import { Card } from "@mui/material";
@@ -7,6 +7,8 @@ import Lottie from "lottie-react";
 import predictionApi from "../api/prediction-api";
 import PieChart from "../components/PieChart";
 import loadingAnimation from "../assets/images/loading.json";
+import DataTable from "../components/DataTable";
+import uuid from 'react-uuid';
 
 
 const HomePage: FunctionComponent = () => {
@@ -17,6 +19,29 @@ const HomePage: FunctionComponent = () => {
   const [successfulPredictions, setSuccessfulPredictions] = useState<[]>();
   const [unsuccessfulPredictions, setUnsuccessfulPredictions] = useState<[]>();
   const [isButtonPressed, setIsButtonPressed] = useState<boolean>(false);
+  const [heads, setHeads] = useState<[]>();
+  const [data, setData] = useState<[]>();
+
+  useEffect(() => {
+    if (testFile !== undefined) {
+      const splitData = testFile.split(/\r?\n/);
+      setHeads(splitData.shift().split(','));
+      console.log(splitData);
+      for (let i = 0; i < splitData.length; i++) {
+        splitData[i] =  splitData[i].split(',')
+        splitData[i] =  {
+          id: uuid(),
+          date: splitData[i][0],
+          open: splitData[i][1],
+          high: splitData[i][2],
+          low: splitData[i][3],
+          close: splitData[i][4],
+          volume: splitData[i][5],
+        }
+      }
+      setData(splitData);
+    }
+  }, [testFile])
 
   const handleSubmit = async () => {
     if (trainFile === undefined || testFile === undefined) {
@@ -43,7 +68,7 @@ const HomePage: FunctionComponent = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles["inner-container"]}>
+      <div className={styles["inner-container"]} style={{marginTop: testFile === undefined ?  0 : 880}}>
         <Card style={{height: 550, width: 550, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           {isButtonPressed ? (
             <Lottie animationData={loadingAnimation} loop={true} />
@@ -72,6 +97,11 @@ const HomePage: FunctionComponent = () => {
             </div>
           </div>
         </Card>
+      </div>
+      <div style={{marginTop: 150}}>
+      {data !== undefined &&
+        <DataTable heads={heads} data={data}/>
+      }
       </div>
     </div>
   );
