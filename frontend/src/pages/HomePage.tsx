@@ -66,7 +66,7 @@ const HomePage: FunctionComponent = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles["inner-container"]} style={{marginTop: testFile === undefined ?  0 : 880}}>
+      <div className={styles["inner-container"]} style={{marginTop: testFile === undefined ?  90 : 970}}>
         <Card style={{height: 550, width: 550, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           {isButtonPressed ? (
             <Lottie animationData={loadingAnimation} loop={true} />
