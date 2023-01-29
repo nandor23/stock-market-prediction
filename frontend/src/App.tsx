@@ -23,7 +23,7 @@ const router = createBrowserRouter([
   }
 ]);
 
-axios.defaults.baseURL = 'https://stock-prediction-api.onrender.com'
+axios.defaults.baseURL = 'http://127.0.0.1:5000'
 
 function App() {
   return (
