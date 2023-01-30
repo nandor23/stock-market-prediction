@@ -34,8 +34,8 @@ const DataTable: FunctionComponent<DataTableProps> = (props) => {
   }
 
   const isGoingUp = (data: any) => {
-    for (let i = 0; i < data.length - 1; i++) {
-      if (data[i].close < data[i + 1].close) {
+    for (let i = 1; i < data.length; i++) {
+      if (data[i].close < data[i - 1].close) {
         data[i].increases = false;
       } else {
         data[i].increases = true;
